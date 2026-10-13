@@ -13,12 +13,12 @@
 
     .search-btn i {
         display: inline;
-        margin-right: o.5rem;
+        margin-right: 0.5rem;
     }
 
     .search-inp {
         border-radius: 25px;
-        padding: o.5rem 3rem 0.5rem 3rem;
+        padding: 0.5rem 3rem 0.5rem 3rem;
         font-size: 1rem;
     }
 </style>
@@ -42,11 +42,11 @@
             </div>
             <div class="navbar-nav ms-auto">
                 <a class="nav-link" href="/listings/new">Airbnb your home</a>
-                <% if(!currUser){ %>
+                <% if(typeof currUser === "undefined" || !currUser){ %>
                     <a class="nav-link" href="/signup"><b>Sign up</b></a>
                     <a class="nav-link" href="/login"><b>Log in</b></a>
                     <% } %>
-                        <% if(currUser) { %>
+                        <% if(typeof currUser !== "undefined" && currUser) { %>
                             <a class="nav-link" href="/logout">Log out</a>
                             <% }%>
             </div>

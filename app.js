@@ -22,16 +22,13 @@ const userRouter = require("./routes/user.js");
 
 const dbUrl = process.env.ATLASDB_URL;
 
-main()
-    .then(() => {
-        console.log("connected to DB");
-    })
-    .catch((err) => {
-        console.log(err);
-    });
-
 async function main() {
+    if (!dbUrl) {
+        throw new Error("ATLASDB_URL is missing");
+    }
+
     await mongoose.connect(dbUrl);
+    console.log("Connected to MongoDB Atlas");
 }
 
 app.set("view engine", "ejs");
@@ -49,8 +46,8 @@ const store = MongoStore.create({
     touchAfter: 24 * 3600,
 });
 
-store.on("error", () => {
-    console.log("ERROR IN MONGO SESSION STORE", err);
+store.on("error", (err) => {
+    console.error("ERROR IN MONGO SESSION STORE:", err);
 });
 
 const sessionOptions = {
@@ -112,6 +109,18 @@ app.use((err, req, res, next) => {
     // res.status(statusCode).send(message);
 });
 
-app.listen(8080, () => {
-    console.log("server is listening to port 8080");
-}); 
+// app.listen(8080, () => {
+//     console.log("server is listening to port 8080");
+// }); 
+const PORT = process.env.PORT || 8080;
+
+main()
+    .then(() => {
+        app.listen(PORT, () => {
+            console.log(`Server is listening on port ${PORT}`);
+        });
+    })
+    .catch((err) => {
+        console.error("Failed to start application:", err.message);
+        process.exit(1);
+    });
